@@ -63,7 +63,8 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>Envio de Texto | Simple Pharma</title>
+        <title>Ativos em falta | Simple Pharma</title>
+        <link rel="icon" type="image/x-icon" href="https://static.wixstatic.com/media/5ede7b_719545c97a084f288b8566db52756425%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/5ede7b_719545c97a084f288b8566db52756425%7Emv2.png">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
@@ -127,13 +128,12 @@
                 <div class="text-center mb-4">
                     <img src="https://static.wixstatic.com/media/6e2603_a1df562998b54aa79d9bedb9add87265~mv2.png/v1/crop/x_0,y_4,w_123,h_73/fill/w_150,h_89,al_c,lg_1,q_85,enc_avif,quality_auto/logo.png" alt="Simple Pharma" style="max-width:140px; height:auto;">
                 </div>
-                <h2 class="text-center mb-4 simple-header">Envio de Texto</h2>
                 <form id="form-texto" autocomplete="off">
                     <div class="mb-3">
-                        <label for="texto" class="form-label">Digite seu texto abaixo (uma por linha):</label>
-                        <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:100px" placeholder="Digite cada informação em uma linha..."></textarea>
-                        <small class="text-muted">Pressione <b>Enter</b> para enviar, <b>Shift+Enter</b> para pular linha.<br>
-                        Cada linha será adicionada como um registro separado.</small>
+                        <!--<label for="texto" class="form-label">Ativos em falta</label>-->
+                        <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:100px" placeholder="Digite o nome do ativo em falta"></textarea>
+                        <!--<small class="text-muted">Pressione <b>Enter</b> para enviar, <b>Shift+Enter</b> para pular linha.<br>
+                        Cada linha será adicionada como um registro separado.</small>-->
                     </div>
                     <button type="submit" class="btn btn-simple w-100 py-2 fs-5">Enviar</button>
                 </form>
