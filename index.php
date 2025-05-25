@@ -34,32 +34,32 @@
                 box-shadow: 0 2px 16px rgba(1, 136, 73, 0.08);
             }
             .btn-simple {
-                background: #018849;
+                background: #47aeb2;
                 color: #fff;
                 font-weight: 600;
                 transition: background .2s;
             }
             .btn-simple:hover,
             .btn-simple:focus {
-                background: #01653a;
+                background: #47aeb2;
                 color: #ffe23b;
             }
             .form-label {
                 font-weight: 500;
-                color: #018849;
+                color: #47aeb2;
             }
             .simple-header {
-                color: #018849;
+                color: #47aeb2;
                 font-weight: 800;
                 letter-spacing: 0.5px;
             }
             textarea.form-control:focus {
-                border-color: #018849;
+                border-color: #47aeb2;
                 box-shadow: 0 0 0 0.2rem #01884930;
             }
             .alert-success {
                 background: #f0fdf5;
-                color: #018849;
+                color: #47aeb2;
                 border: 1px solid #01884922;
             }
             .alert-danger {
@@ -83,7 +83,7 @@
         <div class="container d-flex align-items-center justify-content-center" style="min-height:100vh;">
             <div class="simple-card bg-white p-5 w-100" style="max-width: 440px;">
                 <div class="text-center mb-4">
-                    <img src="https://www.simplepharma.com.br/wp-content/uploads/2023/08/Logo_SimplePharma_Cor.png" alt="Simple Pharma" style="max-width:140px; height:auto;">
+                    <img src="https://static.wixstatic.com/media/6e2603_a1df562998b54aa79d9bedb9add87265~mv2.png/v1/crop/x_0,y_4,w_123,h_73/fill/w_150,h_89,al_c,lg_1,q_85,enc_avif,quality_auto/logo.png" alt="Simple Pharma" style="max-width:140px; height:auto;">
                 </div>
                 <h2 class="text-center mb-4 simple-header">Envio de Texto</h2>
                 <form method="POST" autocomplete="off">
@@ -100,5 +100,14 @@
                 <?php endif; ?>
             </div>
         </div>
+        <script>
+        document.getElementById('texto').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.form.submit();
+            }
+            // Shift+Enter quebra linha normalmente
+        });
+        </script>
     </body>
 </html>
