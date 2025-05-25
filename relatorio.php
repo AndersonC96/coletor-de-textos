@@ -25,7 +25,7 @@
         }
         $agrupados[$texto_norm]['quantidade']++;
         if ($item['criado_em'] > $agrupados[$texto_norm]['ultima_data']) {
-            $agrupados[$texto_norm]['texto'] = $item['texto'];
+            $agrupados[$texto_norm]['texto'] = mb_convert_case($item['texto'], MB_CASE_TITLE, 'UTF-8');
             $agrupados[$texto_norm]['ultima_data'] = $item['criado_em'];
         }
     }
