@@ -90,6 +90,7 @@
                     <div class="mb-3">
                         <label for="texto" class="form-label">Digite seu texto abaixo:</label>
                         <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:100px" placeholder="Digite aqui..."><?= htmlspecialchars($_POST['texto'] ?? '') ?></textarea>
+                        <small class="text-muted">Pressione <b>Enter</b> para enviar, <b>Shift+Enter</b> para pular linha.</small>
                     </div>
                     <button type="submit" class="btn btn-simple w-100 py-2 fs-5">Enviar</button>
                 </form>
