@@ -1,19 +1,61 @@
 <?php
     require 'config.php';
+    session_start();
+    if (isset($_POST['ajax'])) {
+        $texto = $_POST['texto'] ?? '';
+        // Divide pelas quebras de linha (\r\n, \n, \r)
+        $linhas = preg_split('/\r\n|\r|\n/', $texto);
+        $linhas = array_map('sanitizeInput', $linhas);
+        $linhas = array_filter($linhas, fn($l) => strlen(trim($l)) > 0);
+        if (empty($linhas)) {
+            echo json_encode(['type' => 'danger', 'msg' => 'Digite algum texto!']);
+        } else {
+            $db = db();
+            $adicionados = 0;
+            foreach ($linhas as $linha) {
+                // Evita duplicação imediata
+                if (!isset($_SESSION['last_post']) || $_SESSION['last_post'] !== $linha) {
+                    $stmt = $db->prepare('INSERT INTO textos (texto) VALUES (:texto)');
+                    $stmt->execute(['texto' => $linha]);
+                    $_SESSION['last_post'] = $linha;
+                    $adicionados++;
+                }
+            }
+            if ($adicionados) {
+                $msg = ($adicionados === 1) ? 'Texto enviado com sucesso!' : "$adicionados textos enviados com sucesso!";
+                echo json_encode(['type' => 'success', 'msg' => $msg]);
+            } else {
+                echo json_encode(['type' => 'warning', 'msg' => 'Os textos já haviam sido enviados.']);
+            }
+        }
+        exit;
+    }
+    // Fallback tradicional (JS desabilitado)
     $feedback = null;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $texto = $_POST['texto'] ?? '';
-        $texto = sanitizeInput($texto);
-        session_start();
-        if (empty($texto)) {
+        $linhas = preg_split('/\r\n|\r|\n/', $texto);
+        $linhas = array_map('sanitizeInput', $linhas);
+        $linhas = array_filter($linhas, fn($l) => strlen(trim($l)) > 0);
+        if (empty($linhas)) {
             $feedback = ['type' => 'danger', 'msg' => 'Digite algum texto!'];
-        } elseif (isset($_SESSION['last_post']) && $_SESSION['last_post'] === $texto) {
-            $feedback = ['type' => 'warning', 'msg' => 'Texto já enviado recentemente.'];
         } else {
-            $stmt = db()->prepare('INSERT INTO textos (texto) VALUES (:texto)');
-            $stmt->execute(['texto' => $texto]);
-            $_SESSION['last_post'] = $texto;
-            $feedback = ['type' => 'success', 'msg' => 'Texto enviado com sucesso!'];
+            $db = db();
+            $adicionados = 0;
+            foreach ($linhas as $linha) {
+                if (!isset($_SESSION['last_post']) || $_SESSION['last_post'] !== $linha) {
+                    $stmt = $db->prepare('INSERT INTO textos (texto) VALUES (:texto)');
+                    $stmt->execute(['texto' => $linha]);
+                    $_SESSION['last_post'] = $linha;
+                    $adicionados++;
+                }
+            }
+            if ($adicionados) {
+                $msg = ($adicionados === 1) ? 'Texto enviado com sucesso!' : "$adicionados textos enviados com sucesso!";
+                $feedback = ['type' => 'success', 'msg' => $msg];
+            } else {
+                $feedback = ['type' => 'warning', 'msg' => 'Os textos já haviam sido enviados.'];
+            }
         }
     }
 ?>
@@ -86,29 +128,61 @@
                     <img src="https://static.wixstatic.com/media/6e2603_a1df562998b54aa79d9bedb9add87265~mv2.png/v1/crop/x_0,y_4,w_123,h_73/fill/w_150,h_89,al_c,lg_1,q_85,enc_avif,quality_auto/logo.png" alt="Simple Pharma" style="max-width:140px; height:auto;">
                 </div>
                 <h2 class="text-center mb-4 simple-header">Envio de Texto</h2>
-                <form method="POST" autocomplete="off">
+                <form id="form-texto" autocomplete="off">
                     <div class="mb-3">
-                        <label for="texto" class="form-label">Digite seu texto abaixo:</label>
-                        <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:100px" placeholder="Digite aqui..."><?= htmlspecialchars($_POST['texto'] ?? '') ?></textarea>
-                        <small class="text-muted">Pressione <b>Enter</b> para enviar, <b>Shift+Enter</b> para pular linha.</small>
+                        <label for="texto" class="form-label">Digite seu texto abaixo (uma por linha):</label>
+                        <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:100px" placeholder="Digite cada informação em uma linha..."></textarea>
+                        <small class="text-muted">Pressione <b>Enter</b> para enviar, <b>Shift+Enter</b> para pular linha.<br>
+                        Cada linha será adicionada como um registro separado.</small>
                     </div>
                     <button type="submit" class="btn btn-simple w-100 py-2 fs-5">Enviar</button>
                 </form>
+                <div id="feedback"></div>
+                <noscript>
                 <?php if ($feedback): ?>
                     <div class="alert alert-<?= $feedback['type'] ?> mt-4 text-center">
                         <?= htmlspecialchars($feedback['msg']) ?>
                     </div>
                 <?php endif; ?>
+                </noscript>
             </div>
         </div>
         <script>
-        document.getElementById('texto').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            const form = document.getElementById('form-texto');
+            const textarea = document.getElementById('texto');
+            const feedbackDiv = document.getElementById('feedback');
+            // Enter envia, Shift+Enter quebra linha
+            textarea.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    form.requestSubmit();
+                }
+            });
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                this.form.submit();
+                const texto = textarea.value.trim();
+                if (!texto) {
+                    showFeedback('Digite algum texto!', 'danger');
+                    return;
+                }
+                fetch('<?= $_SERVER['PHP_SELF']; ?>', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'ajax=1&texto=' + encodeURIComponent(texto)
+                })
+                .then(res => res.json())
+                .then(res => {
+                    showFeedback(res.msg, res.type);
+                    if (res.type === 'success') {
+                        textarea.value = '';
+                        textarea.focus();
+                    }
+                })
+                .catch(() => showFeedback('Erro ao enviar. Tente novamente!', 'danger'));
+            });
+            function showFeedback(msg, type) {
+                feedbackDiv.innerHTML = `<div class="alert alert-${type} mt-4 text-center">${msg}</div>`;
             }
-            // Shift+Enter quebra linha normalmente
-        });
         </script>
     </body>
 </html>
