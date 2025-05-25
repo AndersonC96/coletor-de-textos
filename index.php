@@ -20,10 +20,10 @@
                 }
             }
             if ($adicionados) {
-                $msg = ($adicionados === 1) ? 'Texto enviado com sucesso!' : "$adicionados textos enviados com sucesso!";
+                $msg = ($adicionados === 1) ? 'Ativo enviado com sucesso!' : "$adicionados ativos enviados com sucesso!";
                 echo json_encode(['type' => 'success', 'msg' => $msg]);
             } else {
-                echo json_encode(['type' => 'warning', 'msg' => 'Os textos já haviam sido enviados.']);
+                echo json_encode(['type' => 'warning', 'msg' => 'Os ativos informados já haviam sido enviados anteriormente.']);
             }
         }
         exit;
@@ -49,10 +49,10 @@
                 }
             }
             if ($adicionados) {
-                $msg = ($adicionados === 1) ? 'Texto enviado com sucesso!' : "$adicionados textos enviados com sucesso!";
+                $msg = ($adicionados === 1) ? 'Ativo enviado com sucesso!' : "$adicionados ativos enviados com sucesso!";
                 $feedback = ['type' => 'success', 'msg' => $msg];
             } else {
-                $feedback = ['type' => 'warning', 'msg' => 'Os textos já haviam sido enviados.'];
+                $feedback = ['type' => 'warning', 'msg' => 'Os ativos informados já haviam sido enviados anteriormente.'];
             }
         }
     }
