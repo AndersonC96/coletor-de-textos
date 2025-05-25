@@ -18,7 +18,7 @@
         $texto_norm = mb_strtolower(html_entity_decode($item['texto']), 'UTF-8');
         if (!isset($agrupados[$texto_norm])) {
             $agrupados[$texto_norm] = [
-                'texto' => $item['texto'],
+                'texto' => mb_convert_case($texto_norm, MB_CASE_TITLE, 'UTF-8'),
                 'quantidade' => 0,
                 'ultima_data' => $item['criado_em'],
             ];
