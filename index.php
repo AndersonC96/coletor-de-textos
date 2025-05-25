@@ -123,21 +123,11 @@
                 <div class="text-center mb-2">
                     <img src="https://static.wixstatic.com/media/6e2603_a1df562998b54aa79d9bedb9add87265~mv2.png/v1/crop/x_0,y_4,w_123,h_73/fill/w_140,h_80,al_c,lg_1,q_85,enc_avif,quality_auto/logo.png"alt="Simple Pharma" style="max-width:120px; height:auto;">
                 </div>
-                <div class="text-center mb-2" style="font-size:2.2em;">
-                    <span style="color:#53C29D;">&#128138;</span>
-                </div>
-                <div class="text-center mb-3" style="color:#168978;font-size:1.15em;">
-                    Sua informação ajuda a manter o cuidado com todos.  
-                    <br>
-                    <span style="color:#53C29D;">Conte com nosso time farmacêutico!</span>
-                </div>
                 <form id="form-texto" autocomplete="off">
                     <div class="mb-3">
                         <textarea name="texto" id="texto" maxlength="2000" required class="form-control" style="min-height:90px; font-size:1.08em;" placeholder="Digite o nome do ativo em falta, ex: Dipirona, Cafeína..."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-simple w-100 py-2 fs-5">
-                        <span style="font-size:1.25em;">&#128640;</span> Enviar
-                    </button>
+                    <button type="submit" class="btn btn-simple w-100 py-2 fs-5">Enviar</button>
                 </form>
                 <div id="feedback"></div>
                 <noscript>
