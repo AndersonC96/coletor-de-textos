@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-simple w-100 py-2 fs-5">
-                        <span style="font-size:1.15em;">📥</span> Baixar Relatório
+                        Baixar Relatório
                     </button>
                 </form>
             </div>
