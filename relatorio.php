@@ -146,7 +146,12 @@
     foreach ($agrupados as $item) {
         $sheet->setCellValue("A{$row}", $item['texto']);
         $sheet->setCellValue("B{$row}", $item['quantidade']);
-        $sheet->setCellValue("C{$row}", \PhpOffice\PhpSpreadsheet\Shared\Date::stringToExcel($item['ultima_data']));
+        $dataValida = strtotime($item['ultima_data']);
+        if ($dataValida !== false) {
+            $sheet->setCellValue("C{$row}", \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($dataValida));
+        } else {
+            $sheet->setCellValue("C{$row}", $item['ultima_data'] ?: '');
+        }
         $row++;
     }
     $lastRow = $row - 1;
